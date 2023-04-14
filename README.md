@@ -94,7 +94,7 @@ const streamHandler = {
 // Make the call and store a reference to the XMLHttpRequest
 const xhr = OpenAIExt.streamChatCompletion(
   {
-    model: openai.modelName,
+    model: "gpt-3.5-turbo",
     messages: [
       { role: "system", content: "You are a helpful assistant." },
       { role: "user", content: "What is 2+2?" },
