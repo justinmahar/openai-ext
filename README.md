@@ -70,7 +70,7 @@ npm i openai-ext
 ## Quick Start
 
 ```js
-import { OpenAIExt } from 'openai-ext';
+import { OpenAIExt } from "openai-ext";
 
 // Configure the stream (type StreamChatCompletionConfig for TypeScript users)
 const streamConfig = {
@@ -95,14 +95,17 @@ const streamHandler = {
 const xhr = OpenAIExt.streamChatCompletion(
   {
     model: openai.modelName,
-    messages: Chat.getChatCompletionRequestMessages(nodePath),
+    messages: [
+      { role: "system", content: "You are a helpful assistant." },
+      { role: "user", content: "What is 2+2?" },
+    ],
   },
   streamConfig,
-  streamHandler,
+  streamHandler
 );
 
 // If you'd like to stop the completion, call xhr.abort(). The onDone() handler will be called.
-xhr.abort()
+xhr.abort();
 ```
 
 [lock:typescript]::🚫---------------------------------------
