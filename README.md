@@ -69,14 +69,40 @@ npm i openai-ext
 
 ## Quick Start
 
-This section will contain a copy/paste example so people can get started quickly.
-
-```jsx
+```js
 import { OpenAIExt } from 'openai-ext';
-```
 
-```jsx
-<Example label="Example Component" />
+// Configure the stream (type StreamChatCompletionConfig for TypeScript users)
+const streamConfig = {
+  apiKey: `123abcXYZasdf`, // Your API key
+};
+
+// Configure your handlers (type StreamChatCompletionHandler for TypeScript users)
+const streamHandler = {
+  // Content contains the string draft, which may be partial. When isFinal is true, the completion is done.
+  onContent(content, isFinal, xhr) {
+    console.log(content, "isFinal?", isFinal);
+  },
+  onDone(xhr) {
+    console.log("Done!");
+  },
+  onError(error, status, xhr) {
+    console.error(error);
+  },
+};
+
+// Make the call and store a reference to the XMLHttpRequest
+const xhr = OpenAIExt.streamChatCompletion(
+  {
+    model: openai.modelName,
+    messages: Chat.getChatCompletionRequestMessages(nodePath),
+  },
+  streamConfig,
+  streamHandler,
+);
+
+// If you'd like to stop the completion, call xhr.abort(). The onDone() handler will be called.
+xhr.abort()
 ```
 
 [lock:typescript]::🚫---------------------------------------
