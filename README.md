@@ -72,12 +72,12 @@ npm i openai-ext
 ```js
 import { OpenAIExt } from "openai-ext";
 
-// Configure the stream (type StreamChatCompletionConfig for TypeScript users)
+// Configure the stream (use type StreamChatCompletionConfig for TypeScript users)
 const streamConfig = {
   apiKey: `123abcXYZasdf`, // Your API key
 };
 
-// Configure your handlers (type StreamChatCompletionHandler for TypeScript users)
+// Configure your handlers (use type StreamChatCompletionHandler for TypeScript users)
 const streamHandler = {
   // Content contains the string draft, which may be partial. When isFinal is true, the completion is done.
   onContent(content, isFinal, xhr) {
