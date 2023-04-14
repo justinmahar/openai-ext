@@ -17,15 +17,17 @@ Read the **[official documentation](https://justinmahar.github.io/openai-ext/)**
 
 ## Overview
 
-This project extends OpenAI's API to support stream chat completions on the client.
+This project extends OpenAI's API to support stream chat completions on the client. 
+
+> Note: This is an unofficial working solution until OpenAI adds client streaming support. This issue is being tracked here: [How to use stream: true? #18](https://github.com/openai/openai-node/issues/18).
 
 ### Features include:
 
-- **Support for streaming chat completions on the client**
+- **💻 Support for streaming chat completions on the client**
   - Easy to use API extension for chat completion stream support on the client.
-- **Easy to configure**
+- **⚙️ Easy to configure**
   - Dead simple configuration for API key and stream handlers.
-- **Support for stopping completions**
+- **🛑 Support for stopping completions**
   - Simply call `abort()` on the returned XHR to stop the completion.
 
 [lock:donate]::🚫---------------------------------------
@@ -70,7 +72,7 @@ npm i openai-ext
 This section will contain a copy/paste example so people can get started quickly.
 
 ```jsx
-import { Example } from 'openai-ext';
+import { OpenAIExt } from 'openai-ext';
 ```
 
 ```jsx
