@@ -1,9 +1,9 @@
 {
-  "name": "react-kindling",
-  "version": "2.4.11",
+  "name": "openai-ext",
+  "version": "0.0.1",
   "author": "Justin Mahar <contact@justinmahar.com>",
-  "description": "A template to build, test, and share React components and hooks easily.",
-  "homepage": "https://justinmahar.github.io/react-kindling/",
+  "description": "Extension to OpenAI's API to support streaming chat completions on the client.",
+  "homepage": "https://justinmahar.github.io/openai-ext/",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -15,15 +15,15 @@
     "preship": "npm run build && git add dist && git diff-index --quiet HEAD || git commit -m \"Build, version, and publish.\" && npm version patch -m \"Build, version, and publish.\"",
     "ship": "npm publish --access public",
     "postship": "git push",
-    "update": "rm -rf .lockblocks && git clone -q git@github.com:justinmahar/react-kindling.git ./.lockblocks && lockblocks ./.lockblocks . --verbose && rm -rf .lockblocks && echo '' && echo ' → Be sure to run `npm i` to install new dependencies.' && echo ''"
+    "update": "rm -rf .lockblocks && git clone -q git@github.com:justinmahar/openai-ext.git ./.lockblocks && lockblocks ./.lockblocks . --verbose && rm -rf .lockblocks && echo '' && echo ' → Be sure to run `npm i` to install new dependencies.' && echo ''"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/justinmahar/react-kindling.git"
+    "url": "git+https://github.com/justinmahar/openai-ext.git"
   },
   "bugs": {
-    "url": "https://github.com/justinmahar/react-kindling/issues"
+    "url": "https://github.com/justinmahar/openai-ext/issues"
   },
   "keywords": [],
   "peerDependencies": {
