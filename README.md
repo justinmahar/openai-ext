@@ -17,12 +17,16 @@ Read the **[official documentation](https://justinmahar.github.io/openai-ext/)**
 
 ## Overview
 
-This section will contain an overview so people can have a high-level understanding of the project.
+This project extends OpenAI's API to support stream chat completions on the client.
 
 ### Features include:
 
-- **🚀 List your features, use fun [emojis](https://emojipedia.org/search/?q=rocket)**
-  - Give a little more info on each feature or mention benefits.
+- **Support for streaming chat completions on the client**
+  - Easy to use API extension for chat completion stream support on the client.
+- **Easy to configure**
+  - Dead simple configuration for API key and stream handlers.
+- **Support for stopping completions**
+  - Simply call `abort()` on the returned XHR to stop the completion.
 
 [lock:donate]::🚫---------------------------------------
 
