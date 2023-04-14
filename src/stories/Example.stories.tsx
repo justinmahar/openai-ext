@@ -7,10 +7,9 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-
-const Example = (args:any) => {
-  return <>example</>
-}
+const Example = (args: any) => {
+  return <>example</>;
+};
 
 export default {
   title: 'Stories/Example',
