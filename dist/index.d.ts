@@ -1,1 +1,1 @@
-export * from './components/Example';
+export * from './OpenAIExt';

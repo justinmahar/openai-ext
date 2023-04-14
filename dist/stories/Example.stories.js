@@ -11,12 +11,14 @@ exports.World = exports.Hello = void 0;
  * More on argTypes: https://storybook.js.org/docs/react/api/argtypes
  */
 const react_1 = __importDefault(require("react"));
-const Example_1 = require("../components/Example");
+const Example = (args) => {
+    return react_1.default.createElement(react_1.default.Fragment, null, "example");
+};
 exports.default = {
     title: 'Stories/Example',
-    component: Example_1.Example,
+    component: Example,
 };
-const Template = (args) => react_1.default.createElement(Example_1.Example, Object.assign({}, args));
+const Template = (args) => react_1.default.createElement(Example, Object.assign({}, args));
 exports.Hello = Template.bind({});
 exports.Hello.args = {
     label: 'Hello',
