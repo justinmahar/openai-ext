@@ -1,6 +1,7 @@
 {
   "name": "openai-ext",
   "version": "0.0.2",
+  "coreVersion": "2.4.11",
   "author": "Justin Mahar <contact@justinmahar.com>",
   "description": "Extension to OpenAI's API to support streaming chat completions on the client.",
   "homepage": "https://justinmahar.github.io/openai-ext/",
@@ -27,10 +28,6 @@
     "url": "https://github.com/justinmahar/openai-ext/issues"
   },
   "keywords": [],
-  "peerDependencies": {
-    "react": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0",
-    "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^20.0.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@mdx-js/react": "^1.6.22",
