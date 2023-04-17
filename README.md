@@ -17,16 +17,18 @@ Read the **[official documentation](https://justinmahar.github.io/openai-ext/)**
 
 ## Overview
 
-This project extends OpenAI's API to support stream chat completions on both the server (Node.js) and client (browser).
+This project extends OpenAI's API to support streaming chat completions on both the server (Node.js) and client (browser).
 
 > Note: This is an unofficial working solution until OpenAI adds streaming support. This issue is being tracked here: [How to use stream: true? #18](https://github.com/openai/openai-node/issues/18).
 
 ### Features include:
 
 - **💻 Support for streaming chat completions**
-  - Easy to use API extension for chat completion stream support.
+  - Easy to use API extension for chat completion streaming support.
 - **⚙️ Easy to configure**
-  - Dead simple configuration for API key and stream handlers.
+  - Dead simple configuration for API and stream handlers.
+- **📜 Content draft parsing**
+  - Content is parsed for you and provided in an easy to digest format as it streams.
 - **🌎 Works in both server (Node.js) and client (browser) environments**
   - Stream completions in either environment: Node.js or in the browser!
 - **🛑 Support for stopping completions**
