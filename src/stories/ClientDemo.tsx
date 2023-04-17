@@ -15,6 +15,7 @@ export const ClientDemo = (props: ClientDemoProps) => {
   const trimmedUserPrompt = userPrompt.trim();
   const [error, setError] = React.useState<undefined | Error>(undefined);
   const [completion, setCompletion] = React.useState('');
+  const [xhr, setXhr] = React.useState<XMLHttpRequest | undefined>(undefined);
 
   const [shouldRun, setShouldRun] = React.useState(false);
   const [running, setRunning] = React.useState(false);
@@ -25,8 +26,10 @@ export const ClientDemo = (props: ClientDemoProps) => {
     if (shouldRun && !running) {
       setShouldRun(false);
       setRunning(true);
+      setError(undefined);
+      setCompletion('');
 
-      OpenAIExt.streamClientChatCompletion(
+      const xhr = OpenAIExt.streamClientChatCompletion(
         {
           model: 'gpt-3.5-turbo',
           messages: [
@@ -42,15 +45,18 @@ export const ClientDemo = (props: ClientDemoProps) => {
             },
             onDone(xhr) {
               setRunning(false);
+              setXhr(undefined);
             },
             onError(error, status, xhr) {
               console.error(error);
               setError(error);
+              setXhr(undefined);
               setRunning(false);
             },
           },
         },
       );
+      setXhr(xhr);
     }
   }, [apiKey, running, shouldRun, systemMessage, userPrompt]);
 
@@ -99,12 +105,15 @@ export const ClientDemo = (props: ClientDemoProps) => {
               required
             />
           </Alert>
-          <div>
-            <Button type="submit" variant="primary" disabled={!canSend || running}>
+          <div className="d-flex gap-1">
+            <Button type="submit" variant="primary" disabled={running}>
               <div className="d-flex align-items-center gap-2">
                 {running && <Spinner animation="border" role="status" size="sm" />}
                 Send
               </div>
+            </Button>
+            <Button type="submit" variant="secondary" disabled={!running} onClick={() => xhr?.abort()}>
+              Stop
             </Button>
           </div>
           {completion && (
