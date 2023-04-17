@@ -30,7 +30,7 @@ This project extends OpenAI's API to support stream chat completions on both the
 - **🌎 Works in both server (Node.js) and client (browser) environments**
   - Stream completions in either environment: Node.js or in the browser!
 - **🛑 Support for stopping completions**
-  - Simply call `abort()` on the returned XHR to stop the completion.
+  - Stop completions before they finish, just like ChatGPT allows.
 
 [lock:donate]::🚫---------------------------------------
 
@@ -59,6 +59,7 @@ If this project helped you, please consider buying me a coffee. Your support is 
 - [Quick Start](#quick-start)
   - [Browser / Client](#browser--client)
   - [Node.js / Server](#nodejs--server)
+- [Content Parsing Utility](#content-parsing-utility)
 - [TypeScript](#typescript)
 - [Icon Attribution](#icon-attribution)
 - [Contributing](#contributing)
@@ -169,6 +170,26 @@ stream.destroy();
 ```
 
 You can also stop completion using an [Axios cancellation](https://axios-http.com/docs/cancellation) in the Axios config.
+
+## Content Parsing Utility
+
+Under the hood, the function `OpenAIExt.parseContentDraft(dataString)` is used to extract completion content from a data string when streaming data in this library.
+
+Feel free to use this if you'd like to handle streaming in a different way than this library provides.
+
+The data string contains lines of JSON completion data starting with `data: ` that are separated by two newlines. 
+The completion is terminated by the line `data: [DONE]` when the completion content can be considered final and done.
+
+When passed a data string, the function returns completion content in the following shape:
+
+```ts
+{
+  content: string; // Content string. May be partial.
+  isFinal: boolean; // When true, the content string is complete and the completion is done.
+}
+```
+
+If you're using this library for streaming completions, parsing is handled for you automatically and the result will be provided via the `onContent` handler callback documented above.
 
 [lock:typescript]::🚫---------------------------------------
 
