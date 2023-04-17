@@ -1,7 +1,8 @@
+import { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } from 'http-status-codes';
 import React from 'react';
 import { DivProps } from 'react-html-props';
 import 'bootstrap/dist/css/bootstrap.css';
-import { Alert, Button, Card, Form, Spinner } from 'react-bootstrap';
+import { Alert, Badge, Button, Card, Form, Spinner } from 'react-bootstrap';
 import { OpenAIExt } from '../OpenAIExt';
 
 export interface ClientDemoProps extends DivProps {}
@@ -14,6 +15,7 @@ export const ClientDemo = (props: ClientDemoProps) => {
   const [userPrompt, setUserPrompt] = React.useState('Give me a bunch of fun emojis!');
   const trimmedUserPrompt = userPrompt.trim();
   const [error, setError] = React.useState<undefined | Error>(undefined);
+  const [status, setStatus] = React.useState<undefined | number>(undefined);
   const [completion, setCompletion] = React.useState('');
   const [xhr, setXhr] = React.useState<XMLHttpRequest | undefined>(undefined);
 
@@ -27,6 +29,7 @@ export const ClientDemo = (props: ClientDemoProps) => {
       setShouldRun(false);
       setRunning(true);
       setError(undefined);
+      setStatus(undefined);
       setCompletion('');
 
       const xhr = OpenAIExt.streamClientChatCompletion(
@@ -50,6 +53,7 @@ export const ClientDemo = (props: ClientDemoProps) => {
             onError(error, status, xhr) {
               console.error(error);
               setError(error);
+              setStatus(status);
               setXhr(undefined);
               setRunning(false);
             },
@@ -135,6 +139,13 @@ export const ClientDemo = (props: ClientDemoProps) => {
           )}
           {error && (
             <Alert variant="danger" className="d-flex flex-column gap-1 mb-0">
+              {status && (
+                <div>
+                  <Badge bg="danger">
+                    {status} {getReasonPhrase(status)}
+                  </Badge>
+                </div>
+              )}
               <div className="fw-bold">{`${error}`}</div>
             </Alert>
           )}
