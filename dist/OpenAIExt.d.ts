@@ -20,6 +20,25 @@ export declare class OpenAIExt {
      * @param axiosConfig Optional axios config for the request.
      */
     static streamServerChatCompletion(createChatCompletionRequest: any, streamConfig: ServerStreamChatCompletionConfig, axiosConfig: any): void;
+    /**
+     * Parse a content draft from the provided data string. The data string contains lines of JSON completion data starting with `data: ` that are separated by two newlines.
+     * The completion is terminated by the line `data: [DONE]`, when the completion content can be considered final and done.
+     *
+     * The returned content draft is an object containing a `content` property with the content, which may be partial, and an `isFinal`
+     * boolean that will be `true` when the content is final and the completion is done.
+     *
+     * Returns:
+     * ```ts
+     * {
+     *   content: string; // Content string. May be partial.
+     *   isFinal: boolean; // When true, the content string is complete.
+     * }
+     * ```
+     *
+     * @param dataString The data string containing double-newline-separated data lines starting with `data: `.
+     * @returns An object containing a `content` property with the content, which may be partial, and an `isFinal`
+     * boolean that will be `true` when the content is final and the completion is done.
+     */
     static parseContentDraft(dataString: string): ContentDraft;
 }
 export interface ContentDraft {

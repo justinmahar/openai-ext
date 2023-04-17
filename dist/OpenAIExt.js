@@ -99,15 +99,35 @@ class OpenAIExt {
             }
         });
     }
+    /**
+     * Parse a content draft from the provided data string. The data string contains lines of JSON completion data starting with `data: ` that are separated by two newlines.
+     * The completion is terminated by the line `data: [DONE]`, when the completion content can be considered final and done.
+     *
+     * The returned content draft is an object containing a `content` property with the content, which may be partial, and an `isFinal`
+     * boolean that will be `true` when the content is final and the completion is done.
+     *
+     * Returns:
+     * ```ts
+     * {
+     *   content: string; // Content string. May be partial.
+     *   isFinal: boolean; // When true, the content string is complete.
+     * }
+     * ```
+     *
+     * @param dataString The data string containing double-newline-separated data lines starting with `data: `.
+     * @returns An object containing a `content` property with the content, which may be partial, and an `isFinal`
+     * boolean that will be `true` when the content is final and the completion is done.
+     */
     static parseContentDraft(dataString) {
-        const doneData = 'data: [DONE]';
+        const dataPrefix = 'data: ';
+        const doneData = `'${dataPrefix}[DONE]'`;
         const isFinal = dataString.includes(doneData);
         const dataJsonLines = dataString
-            .split('data: [DONE]')
+            .split(doneData)
             .join('')
             .trim()
-            .split('data: ')
-            .filter((v) => !!v);
+            .split(dataPrefix)
+            .filter((v) => !!v); // Remove empty lines
         const contentSnippets = dataJsonLines.map((dataJson) => {
             var _a, _b, _c;
             let parsed = undefined;
