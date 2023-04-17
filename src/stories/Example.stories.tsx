@@ -6,24 +6,17 @@
  */
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-
-const Example = (args: any) => {
-  return <>example</>;
-};
+import { ClientDemo } from './ClientDemo';
 
 export default {
-  title: 'Stories/Example',
-  component: Example,
-} as ComponentMeta<typeof Example>;
+  title: 'Demo',
+  component: ClientDemo,
+} as ComponentMeta<typeof ClientDemo>;
 
-const Template: ComponentStory<typeof Example> = (args) => <Example {...args} />;
+const Template: ComponentStory<typeof ClientDemo> = (args) => <ClientDemo {...args} />;
 
-export const Hello = Template.bind({});
-Hello.args = {
-  label: 'Hello',
-};
-
-export const World = Template.bind({});
-World.args = {
-  label: 'World',
+export const Client = Template.bind({});
+Client.args = {};
+Client.story = {
+  name: 'Client Demo',
 };

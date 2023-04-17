@@ -144,7 +144,7 @@ export class OpenAIExt {
    */
   public static parseContentDraft(dataString: string): ContentDraft {
     const dataPrefix = 'data: ';
-    const doneData = `'${dataPrefix}[DONE]'`;
+    const doneData = `${dataPrefix}[DONE]`;
     const isFinal = dataString.includes(doneData);
     const dataJsonLines = dataString
       .split(doneData)
@@ -160,6 +160,7 @@ export class OpenAIExt {
         return parsed?.choices[0]?.delta?.content ?? '';
       } catch (e) {
         console.error(e);
+        console.error(`Bad data JSON: \`${dataJson}\``);
       }
       return '';
     });
