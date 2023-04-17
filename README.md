@@ -112,7 +112,7 @@ const xhr = OpenAIExt.streamClientChatCompletion(
     model: "gpt-3.5-turbo",
     messages: [
       { role: "system", content: "You are a helpful assistant." },
-      { role: "user", content: "Give me a bunch of fun emojis!" },
+      { role: "user", content: "Give me a weird sentence and include obnoxious emojis." },
     ],
   },
   streamConfig
@@ -163,7 +163,7 @@ OpenAIExt.streamServerChatCompletion(
     model: 'gpt-3.5-turbo',
     messages: [
       { role: 'system', content: 'You are a helpful assistant.' },
-      { role: 'user', content: 'Give me a bunch of fun emojis!' },
+      { role: 'user', content: 'Give me a weird sentence and include obnoxious emojis.' },
     ],
   },
   streamConfig,

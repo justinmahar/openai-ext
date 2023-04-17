@@ -12,7 +12,7 @@ export const ClientDemo = (props: ClientDemoProps) => {
   const trimmedApiKey = apiKey.trim();
   const [systemMessage, setSystemMessage] = React.useState('You are a helpful assistant.');
   const trimmedSystemMessage = systemMessage.trim();
-  const [userPrompt, setUserPrompt] = React.useState('Give me a bunch of fun emojis!');
+  const [userPrompt, setUserPrompt] = React.useState('Give me a weird sentence and include obnoxious emojis.');
   const trimmedUserPrompt = userPrompt.trim();
   const [error, setError] = React.useState<undefined | Error>(undefined);
   const [status, setStatus] = React.useState<undefined | number>(undefined);
