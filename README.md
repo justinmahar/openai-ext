@@ -2,7 +2,7 @@
   🤖 openai-ext
 </h2>
 <h3 align="center">
-  Extension to OpenAI's API to support streaming chat completions on the client.
+  Extension to OpenAI's API to support streaming chat completions.
 </h3>
 <p align="center">
   <a href="https://badge.fury.io/js/openai-ext" target="_blank" rel="noopener noreferrer"><img src="https://badge.fury.io/js/openai-ext.svg" alt="npm Version" /></a>&nbsp;
@@ -17,16 +17,18 @@ Read the **[official documentation](https://justinmahar.github.io/openai-ext/)**
 
 ## Overview
 
-This project extends OpenAI's API to support stream chat completions on the client. 
+This project extends OpenAI's API to support stream chat completions on both the server (Node.js) and client (browser).
 
-> Note: This is an unofficial working solution until OpenAI adds client streaming support. This issue is being tracked here: [How to use stream: true? #18](https://github.com/openai/openai-node/issues/18).
+> Note: This is an unofficial working solution until OpenAI adds streaming support. This issue is being tracked here: [How to use stream: true? #18](https://github.com/openai/openai-node/issues/18).
 
 ### Features include:
 
-- **💻 Support for streaming chat completions on the client**
-  - Easy to use API extension for chat completion stream support on the client.
+- **💻 Support for streaming chat completions**
+  - Easy to use API extension for chat completion stream support.
 - **⚙️ Easy to configure**
   - Dead simple configuration for API key and stream handlers.
+- **🌎 Works in both server (Node.js) and client (browser) environments**
+  - Stream completions in either environment: Node.js or in the browser!
 - **🛑 Support for stopping completions**
   - Simply call `abort()` on the returned XHR to stop the completion.
 
@@ -55,6 +57,8 @@ If this project helped you, please consider buying me a coffee. Your support is 
 - [Table of Contents](#table-of-contents)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+  - [Browser / Client](#browser--client)
+  - [Node.js / Server](#nodejs--server)
 - [TypeScript](#typescript)
 - [Icon Attribution](#icon-attribution)
 - [Contributing](#contributing)
@@ -69,44 +73,102 @@ npm i openai-ext
 
 ## Quick Start
 
+### Browser / Client
+
+Use the following solution in a browser environment:
+
 ```js
 import { OpenAIExt } from "openai-ext";
 
-// Configure the stream (use type StreamChatCompletionConfig for TypeScript users)
+// Configure the stream (use type ClientStreamChatCompletionConfig for TypeScript users)
 const streamConfig = {
   apiKey: `123abcXYZasdf`, // Your API key
-};
-
-// Configure your handlers (use type StreamChatCompletionHandler for TypeScript users)
-const streamHandler = {
-  // Content contains the string draft, which may be partial. When isFinal is true, the completion is done.
-  onContent(content, isFinal, xhr) {
-    console.log(content, "isFinal?", isFinal);
-  },
-  onDone(xhr) {
-    console.log("Done!");
-  },
-  onError(error, status, xhr) {
-    console.error(error);
+  handler: {
+    // Content contains the string draft, which may be partial. When isFinal is true, the completion is done.
+    onContent(content, isFinal, xhr) {
+      console.log(content, "isFinal?", isFinal);
+    },
+    onDone(xhr) {
+      console.log("Done!");
+    },
+    onError(error, status, xhr) {
+      console.error(error);
+    },
   },
 };
 
 // Make the call and store a reference to the XMLHttpRequest
-const xhr = OpenAIExt.streamChatCompletion(
+const xhr = OpenAIExt.streamClientChatCompletion(
   {
     model: "gpt-3.5-turbo",
     messages: [
       { role: "system", content: "You are a helpful assistant." },
-      { role: "user", content: "What is 2+2?" },
+      { role: "user", content: "Give me a bunch of fun emojis!" },
     ],
   },
-  streamConfig,
-  streamHandler
+  streamConfig
 );
+```
 
+```js
 // If you'd like to stop the completion, call xhr.abort(). The onDone() handler will be called.
 xhr.abort();
 ```
+
+### Node.js / Server
+
+Use the following solution in a Node.js or server environment:
+
+```js
+import { Configuration, OpenAIApi } from 'openai';
+import { OpenAIExt } from "openai-ext";
+
+const apiKey = `123abcXYZasdf`; // Your API key
+const configuration = new Configuration({ apiKey });
+const openai = new OpenAIApi(configuration);
+
+// Configure the stream (use type ClientStreamChatCompletionConfig for TypeScript users)
+const streamConfig = {
+  openai: openai,
+  handler: {
+    // Content contains the string draft, which may be partial. When isFinal is true, the completion is done.
+    onContent(content, isFinal, stream) {
+      console.log(content, "isFinal?", isFinal);
+    },
+    onDone(stream) {
+      console.log('Done!');
+    },
+    onError(error, stream) {
+      console.error(error);
+    },
+  },
+};
+
+const axiosConfig = {
+  // ...
+};
+
+// Make the call to stream the completion
+OpenAIExt.streamServerChatCompletion(
+  {
+    model: 'gpt-3.5-turbo',
+    messages: [
+      { role: 'system', content: 'You are a helpful assistant.' },
+      { role: 'user', content: 'Give me a bunch of fun emojis!' },
+    ],
+  },
+  streamConfig,
+  axiosConfig
+);
+```
+
+If you'd like to stop the completion, call `stream.destroy()`. The `onDone()` handler will be called.
+
+```js
+stream.destroy();
+```
+
+You can also abort stop completion using an [Axios cancellation](https://axios-http.com/docs/cancellation) in the Axios config.
 
 [lock:typescript]::🚫---------------------------------------
 
