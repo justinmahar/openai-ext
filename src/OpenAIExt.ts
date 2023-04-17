@@ -173,8 +173,17 @@ export class OpenAIExt {
   }
 }
 
+/**
+ * Content draft containing content string, which may be partial, and isFinal indicating whether the draft is final and complete.
+ */
 export interface ContentDraft {
+  /**
+   * The content string, which may be partial.
+   */
   content: string;
+  /**
+   * When true, the content draft is final and complete.
+   */
   isFinal: boolean;
 }
 
@@ -213,7 +222,7 @@ export interface ClientStreamChatCompletionHandler {
  */
 export interface ClientStreamChatCompletionConfig {
   /**
-   * The API key to uses for the request.
+   * The API key to use for the request.
    */
   apiKey: string;
   /**
