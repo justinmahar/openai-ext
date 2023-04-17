@@ -17,6 +17,7 @@ const ClientDemo = (props) => {
     const trimmedUserPrompt = userPrompt.trim();
     const [error, setError] = react_1.default.useState(undefined);
     const [completion, setCompletion] = react_1.default.useState('');
+    const [xhr, setXhr] = react_1.default.useState(undefined);
     const [shouldRun, setShouldRun] = react_1.default.useState(false);
     const [running, setRunning] = react_1.default.useState(false);
     const canSend = trimmedApiKey && trimmedSystemMessage && trimmedUserPrompt;
@@ -24,7 +25,9 @@ const ClientDemo = (props) => {
         if (shouldRun && !running) {
             setShouldRun(false);
             setRunning(true);
-            OpenAIExt_1.OpenAIExt.streamClientChatCompletion({
+            setError(undefined);
+            setCompletion('');
+            const xhr = OpenAIExt_1.OpenAIExt.streamClientChatCompletion({
                 model: 'gpt-3.5-turbo',
                 messages: [
                     { role: 'system', content: systemMessage },
@@ -38,14 +41,17 @@ const ClientDemo = (props) => {
                     },
                     onDone(xhr) {
                         setRunning(false);
+                        setXhr(undefined);
                     },
                     onError(error, status, xhr) {
                         console.error(error);
                         setError(error);
+                        setXhr(undefined);
                         setRunning(false);
                     },
                 },
             });
+            setXhr(xhr);
         }
     }, [apiKey, running, shouldRun, systemMessage, userPrompt]);
     return (react_1.default.createElement(react_bootstrap_1.Card, null,
@@ -67,11 +73,12 @@ const ClientDemo = (props) => {
                 react_1.default.createElement(react_bootstrap_1.Alert, { variant: "primary", className: "d-flex flex-column gap-1 mb-0" },
                     react_1.default.createElement("div", { className: "small fw-bold" }, "User Prompt:"),
                     react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "Enter user prompt", value: userPrompt, onChange: (e) => setUserPrompt(e.target.value), required: true })),
-                react_1.default.createElement("div", null,
-                    react_1.default.createElement(react_bootstrap_1.Button, { type: "submit", variant: "primary", disabled: !canSend || running },
+                react_1.default.createElement("div", { className: "d-flex gap-1" },
+                    react_1.default.createElement(react_bootstrap_1.Button, { type: "submit", variant: "primary", disabled: running },
                         react_1.default.createElement("div", { className: "d-flex align-items-center gap-2" },
                             running && react_1.default.createElement(react_bootstrap_1.Spinner, { animation: "border", role: "status", size: "sm" }),
-                            "Send"))),
+                            "Send")),
+                    react_1.default.createElement(react_bootstrap_1.Button, { type: "submit", variant: "secondary", disabled: !running, onClick: () => xhr === null || xhr === void 0 ? void 0 : xhr.abort() }, "Stop")),
                 completion && (react_1.default.createElement(react_bootstrap_1.Alert, { variant: "success", className: "d-flex flex-column gap-1 mb-0" },
                     react_1.default.createElement("pre", { className: "fw-bold mb-0", style: { whiteSpace: 'pre-wrap' } },
                         completion,
