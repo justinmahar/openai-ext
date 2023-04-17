@@ -127,7 +127,7 @@ const apiKey = `123abcXYZasdf`; // Your API key
 const configuration = new Configuration({ apiKey });
 const openai = new OpenAIApi(configuration);
 
-// Configure the stream (use type ClientStreamChatCompletionConfig for TypeScript users)
+// Configure the stream (use type ServerStreamChatCompletionConfig for TypeScript users)
 const streamConfig = {
   openai: openai,
   handler: {
@@ -168,7 +168,7 @@ If you'd like to stop the completion, call `stream.destroy()`. The `onDone()` ha
 stream.destroy();
 ```
 
-You can also abort stop completion using an [Axios cancellation](https://axios-http.com/docs/cancellation) in the Axios config.
+You can also stop completion using an [Axios cancellation](https://axios-http.com/docs/cancellation) in the Axios config.
 
 [lock:typescript]::🚫---------------------------------------
 
