@@ -231,10 +231,12 @@ export interface ServerStreamChatCompletionHandler {
   /**
    * Called when there is an error during streaming. For example, 401 unauthorized when the API key is invalid.
    *
+   * The `stream` argument may be `undefined` if the stream could not be created.
+   *
    * @param error The error reported.
-   * @param stream The Axios request stream (of type IncomingMessage).
+   * @param stream The Axios request stream (of type IncomingMessage) or `undefined` if the stream couldn't be created.
    */
-  onError?: (error: Error, stream: any) => void;
+  onError?: (error: Error, stream?: any) => void;
 }
 
 /**
