@@ -62,7 +62,16 @@ export const ClientDemo = (props: ClientDemoProps) => {
 
   return (
     <Card>
-      <Card.Header>Client Chat Completion Stream Demo</Card.Header>
+      <Card.Header>
+        <div className="d-flex flex-wrap align-items-center gap-4">
+          <div>Client Chat Completion Stream Demo</div>
+          <div style={{ fontSize: '80%' }}>
+            <a href="https://github.com/justinmahar/openai-ext/blob/master/src/stories/ClientDemo.tsx">
+              View Demo Source
+            </a>
+          </div>
+        </div>
+      </Card.Header>
       <Card.Body>
         <Form
           className="d-flex flex-column gap-2"
