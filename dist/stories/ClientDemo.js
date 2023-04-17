@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClientDemo = void 0;
+const http_status_codes_1 = require("http-status-codes");
 const react_1 = __importDefault(require("react"));
 require("bootstrap/dist/css/bootstrap.css");
 const react_bootstrap_1 = require("react-bootstrap");
@@ -13,9 +14,10 @@ const ClientDemo = (props) => {
     const trimmedApiKey = apiKey.trim();
     const [systemMessage, setSystemMessage] = react_1.default.useState('You are a helpful assistant.');
     const trimmedSystemMessage = systemMessage.trim();
-    const [userPrompt, setUserPrompt] = react_1.default.useState('Give me a bunch of fun emojis!');
+    const [userPrompt, setUserPrompt] = react_1.default.useState('Give me a weird sentence and include obnoxious emojis.');
     const trimmedUserPrompt = userPrompt.trim();
     const [error, setError] = react_1.default.useState(undefined);
+    const [status, setStatus] = react_1.default.useState(undefined);
     const [completion, setCompletion] = react_1.default.useState('');
     const [xhr, setXhr] = react_1.default.useState(undefined);
     const [shouldRun, setShouldRun] = react_1.default.useState(false);
@@ -26,6 +28,7 @@ const ClientDemo = (props) => {
             setShouldRun(false);
             setRunning(true);
             setError(undefined);
+            setStatus(undefined);
             setCompletion('');
             const xhr = OpenAIExt_1.OpenAIExt.streamClientChatCompletion({
                 model: 'gpt-3.5-turbo',
@@ -46,6 +49,7 @@ const ClientDemo = (props) => {
                     onError(error, status, xhr) {
                         console.error(error);
                         setError(error);
+                        setStatus(status);
                         setXhr(undefined);
                         setRunning(false);
                     },
@@ -55,7 +59,11 @@ const ClientDemo = (props) => {
         }
     }, [apiKey, running, shouldRun, systemMessage, userPrompt]);
     return (react_1.default.createElement(react_bootstrap_1.Card, null,
-        react_1.default.createElement(react_bootstrap_1.Card.Header, null, "Client Chat Completion Stream Demo"),
+        react_1.default.createElement(react_bootstrap_1.Card.Header, null,
+            react_1.default.createElement("div", { className: "d-flex flex-wrap align-items-center gap-4" },
+                react_1.default.createElement("div", null, "Client Chat Completion Stream Demo"),
+                react_1.default.createElement("div", { style: { fontSize: '80%' } },
+                    react_1.default.createElement("a", { href: "https://github.com/justinmahar/openai-ext/blob/master/src/stories/ClientDemo.tsx" }, "View Demo Source")))),
         react_1.default.createElement(react_bootstrap_1.Card.Body, null,
             react_1.default.createElement(react_bootstrap_1.Form, { className: "d-flex flex-column gap-2", onSubmit: (e) => {
                     e.preventDefault();
@@ -84,6 +92,11 @@ const ClientDemo = (props) => {
                         completion,
                         running && react_1.default.createElement(react_1.default.Fragment, null, "\u2588")))),
                 error && (react_1.default.createElement(react_bootstrap_1.Alert, { variant: "danger", className: "d-flex flex-column gap-1 mb-0" },
+                    status && (react_1.default.createElement("div", null,
+                        react_1.default.createElement(react_bootstrap_1.Badge, { bg: "danger" },
+                            status,
+                            " ",
+                            (0, http_status_codes_1.getReasonPhrase)(status)))),
                     react_1.default.createElement("div", { className: "fw-bold" }, `${error}`)))))));
 };
 exports.ClientDemo = ClientDemo;
