@@ -11,7 +11,7 @@
   <a href="https://github.com/sponsors/justinmahar" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86" alt="Sponsor"/></a>
 </p>
 
-<a href="https://justinmahar.github.io/openai-ext/?path=/story/demo--client"><h3>👁️ Live Demo</h3></a>
+<h3><a href="https://justinmahar.github.io/openai-ext/?path=/story/demo--client">👁️ Live Demo</a></h3>
 
 ## Documentation
 
