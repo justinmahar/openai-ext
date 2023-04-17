@@ -11,9 +11,13 @@
   <a href="https://github.com/sponsors/justinmahar" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86" alt="Sponsor"/></a>
 </p>
 
+<a href="https://justinmahar.github.io/openai-ext/?path=/story/demo--client"><h3>👁️ Live Demo</h3></a>
+
 ## Documentation
 
 Read the **[official documentation](https://justinmahar.github.io/openai-ext/)**.
+
+<a href="https://justinmahar.github.io/openai-ext/?path=/story/demo--client">View the live demo.</a>
 
 ## Overview
 
@@ -77,6 +81,8 @@ npm i openai-ext
 ## Quick Start
 
 ### Browser / Client
+
+<a href="https://justinmahar.github.io/openai-ext/?path=/story/demo--client">View the live demo.</a>
 
 Use the following solution in a browser environment:
 
