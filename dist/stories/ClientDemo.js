@@ -10,13 +10,10 @@ const react_1 = __importDefault(require("react"));
 const react_bootstrap_1 = require("react-bootstrap");
 const OpenAIExt_1 = require("../OpenAIExt");
 const ClientDemo = (props) => {
-    const [apiKey, setApiKey] = react_1.default.useState('');
     const [model, setModel] = react_1.default.useState('gpt-3.5-turbo');
-    const trimmedApiKey = apiKey.trim();
+    const [apiKey, setApiKey] = react_1.default.useState('');
     const [systemPrompt, setSystemPrompt] = react_1.default.useState('You are a helpful assistant.');
-    const trimmedSystemMessage = systemPrompt.trim();
     const [userPrompt, setUserPrompt] = react_1.default.useState('Tell me a funny joke.');
-    const trimmedUserPrompt = userPrompt.trim();
     const [error, setError] = react_1.default.useState(undefined);
     const [status, setStatus] = react_1.default.useState(undefined);
     const [completion, setCompletion] = react_1.default.useState('');
@@ -24,7 +21,6 @@ const ClientDemo = (props) => {
     const [showKey, setShowKey] = react_1.default.useState(false);
     const [shouldRun, setShouldRun] = react_1.default.useState(false);
     const [running, setRunning] = react_1.default.useState(false);
-    const canSend = trimmedApiKey && trimmedSystemMessage && trimmedUserPrompt;
     react_1.default.useEffect(() => {
         if (shouldRun && !running) {
             setShouldRun(false);
@@ -59,7 +55,7 @@ const ClientDemo = (props) => {
             });
             setXhr(xhr);
         }
-    }, [apiKey, running, shouldRun, systemPrompt, userPrompt]);
+    }, [apiKey, model, running, shouldRun, systemPrompt, userPrompt]);
     return (react_1.default.createElement(react_bootstrap_1.Card, null,
         react_1.default.createElement(react_bootstrap_1.Card.Header, null,
             react_1.default.createElement("div", { className: "d-flex flex-wrap align-items-center gap-4" },
@@ -69,7 +65,7 @@ const ClientDemo = (props) => {
         react_1.default.createElement(react_bootstrap_1.Card.Body, null,
             react_1.default.createElement(react_bootstrap_1.Form, { className: "d-flex flex-column gap-2", onSubmit: (e) => {
                     e.preventDefault();
-                    if (canSend && !running) {
+                    if (!running) {
                         setShouldRun(true);
                     }
                 } },
@@ -105,6 +101,11 @@ const ClientDemo = (props) => {
                             status,
                             " ",
                             (0, http_status_codes_1.getReasonPhrase)(status)))),
-                    react_1.default.createElement("div", { className: "fw-bold" }, `${error}`)))))));
+                    react_1.default.createElement("div", { className: "fw-bold" }, `${error}`))),
+                react_1.default.createElement("h5", { className: "text-muted text-center mb-2 mt-3" },
+                    "If this project helped you, please",
+                    ' ',
+                    react_1.default.createElement("a", { href: "https://github.com/justinmahar/openai-ext/" }, "Star it on GitHub"),
+                    " so others can find it. :)")))));
 };
 exports.ClientDemo = ClientDemo;

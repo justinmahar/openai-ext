@@ -98,6 +98,7 @@ class OpenAIExt {
                 streamConfig.handler.onError(e, undefined);
             }
         });
+        return responsePromise;
     }
     /**
      * Parse a content draft from the provided data string. The data string contains lines of JSON completion data starting with `data: ` that are separated by two newlines.
