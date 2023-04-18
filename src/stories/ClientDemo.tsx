@@ -8,13 +8,10 @@ import { OpenAIExt } from '../OpenAIExt';
 export interface ClientDemoProps extends DivProps {}
 
 export const ClientDemo = (props: ClientDemoProps) => {
-  const [apiKey, setApiKey] = React.useState('');
   const [model, setModel] = React.useState('gpt-3.5-turbo');
-  const trimmedApiKey = apiKey.trim();
+  const [apiKey, setApiKey] = React.useState('');
   const [systemPrompt, setSystemPrompt] = React.useState('You are a helpful assistant.');
-  const trimmedSystemMessage = systemPrompt.trim();
   const [userPrompt, setUserPrompt] = React.useState('Tell me a funny joke.');
-  const trimmedUserPrompt = userPrompt.trim();
   const [error, setError] = React.useState<undefined | Error>(undefined);
   const [status, setStatus] = React.useState<undefined | number>(undefined);
   const [completion, setCompletion] = React.useState('');
@@ -23,8 +20,6 @@ export const ClientDemo = (props: ClientDemoProps) => {
 
   const [shouldRun, setShouldRun] = React.useState(false);
   const [running, setRunning] = React.useState(false);
-
-  const canSend = trimmedApiKey && trimmedSystemMessage && trimmedUserPrompt;
 
   React.useEffect(() => {
     if (shouldRun && !running) {
@@ -64,7 +59,7 @@ export const ClientDemo = (props: ClientDemoProps) => {
       );
       setXhr(xhr);
     }
-  }, [apiKey, running, shouldRun, systemPrompt, userPrompt]);
+  }, [apiKey, model, running, shouldRun, systemPrompt, userPrompt]);
 
   return (
     <Card>
@@ -83,7 +78,7 @@ export const ClientDemo = (props: ClientDemoProps) => {
           className="d-flex flex-column gap-2"
           onSubmit={(e) => {
             e.preventDefault();
-            if (canSend && !running) {
+            if (!running) {
               setShouldRun(true);
             }
           }}
