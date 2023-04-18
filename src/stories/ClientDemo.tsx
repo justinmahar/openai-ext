@@ -163,6 +163,10 @@ export const ClientDemo = (props: ClientDemoProps) => {
               <div className="fw-bold">{`${error}`}</div>
             </Alert>
           )}
+          <h5 className="text-muted text-center mb-2 mt-3">
+            If this project helped you, please{' '}
+            <a href="https://github.com/justinmahar/openai-ext/">Star it on GitHub</a> so others can find it. :)
+          </h5>
         </Form>
       </Card.Body>
     </Card>
