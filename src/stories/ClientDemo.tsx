@@ -12,12 +12,13 @@ export const ClientDemo = (props: ClientDemoProps) => {
   const trimmedApiKey = apiKey.trim();
   const [systemMessage, setSystemMessage] = React.useState('You are a helpful assistant.');
   const trimmedSystemMessage = systemMessage.trim();
-  const [userPrompt, setUserPrompt] = React.useState('Give me a weird sentence and include obnoxious emojis.');
+  const [userPrompt, setUserPrompt] = React.useState('Tell me a funny joke.');
   const trimmedUserPrompt = userPrompt.trim();
   const [error, setError] = React.useState<undefined | Error>(undefined);
   const [status, setStatus] = React.useState<undefined | number>(undefined);
   const [completion, setCompletion] = React.useState('');
   const [xhr, setXhr] = React.useState<XMLHttpRequest | undefined>(undefined);
+  const [showKey, setShowKey] = React.useState(false);
 
   const [shouldRun, setShouldRun] = React.useState(false);
   const [running, setRunning] = React.useState(false);
@@ -89,13 +90,18 @@ export const ClientDemo = (props: ClientDemoProps) => {
           <Card>
             <Card.Body className="d-flex flex-column gap-1">
               <div className="small fw-bold">API Key:</div>
-              <Form.Control
-                type="text"
-                placeholder="Enter API key"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                required
-              />
+              <div className="d-flex gap-1">
+                <Form.Control
+                  type={showKey ? 'text' : 'password'}
+                  placeholder="Enter API key"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  required
+                />
+                <Button variant="outline-primary" onClick={() => setShowKey(!showKey)}>
+                  {showKey ? 'Hide' : 'Show'}
+                </Button>
+              </div>
             </Card.Body>
           </Card>
           <Alert variant="info" className="d-flex flex-column gap-1 mb-0">
