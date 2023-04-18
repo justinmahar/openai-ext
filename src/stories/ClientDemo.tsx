@@ -11,8 +11,8 @@ export const ClientDemo = (props: ClientDemoProps) => {
   const [apiKey, setApiKey] = React.useState('');
   const [model, setModel] = React.useState('gpt-3.5-turbo');
   const trimmedApiKey = apiKey.trim();
-  const [systemMessage, setSystemMessage] = React.useState('You are a helpful assistant.');
-  const trimmedSystemMessage = systemMessage.trim();
+  const [systemPrompt, setSystemPrompt] = React.useState('You are a helpful assistant.');
+  const trimmedSystemMessage = systemPrompt.trim();
   const [userPrompt, setUserPrompt] = React.useState('Tell me a funny joke.');
   const trimmedUserPrompt = userPrompt.trim();
   const [error, setError] = React.useState<undefined | Error>(undefined);
@@ -38,7 +38,7 @@ export const ClientDemo = (props: ClientDemoProps) => {
         {
           model,
           messages: [
-            { role: 'system', content: systemMessage },
+            { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt },
           ],
         },
@@ -64,7 +64,7 @@ export const ClientDemo = (props: ClientDemoProps) => {
       );
       setXhr(xhr);
     }
-  }, [apiKey, running, shouldRun, systemMessage, userPrompt]);
+  }, [apiKey, running, shouldRun, systemPrompt, userPrompt]);
 
   return (
     <Card>
@@ -118,17 +118,17 @@ export const ClientDemo = (props: ClientDemoProps) => {
             </Card.Body>
           </Card>
           <Alert variant="info" className="d-flex flex-column gap-1 mb-0">
-            <div className="small fw-bold">System Message:</div>
+            <div className="small fw-bold">🤖 System Prompt:</div>
             <Form.Control
               type="text"
-              placeholder="Enter system message"
-              value={systemMessage}
-              onChange={(e) => setSystemMessage(e.target.value)}
+              placeholder="Enter system prompt"
+              value={systemPrompt}
+              onChange={(e) => setSystemPrompt(e.target.value)}
               required
             />
           </Alert>
           <Alert variant="primary" className="d-flex flex-column gap-1 mb-0">
-            <div className="small fw-bold">User Prompt:</div>
+            <div className="small fw-bold">👤 User Prompt:</div>
             <Form.Control
               type="text"
               placeholder="Enter user prompt"
