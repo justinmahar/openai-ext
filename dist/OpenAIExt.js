@@ -65,7 +65,7 @@ class OpenAIExt {
      * @param streamConfig The config for the stream request. This includes the configured `openai` instance.
      * @param axiosConfig Optional axios config for the request.
      */
-    static streamServerChatCompletion(createChatCompletionRequest, streamConfig, axiosConfig) {
+    static streamServerChatCompletion(createChatCompletionRequest, streamConfig, axiosConfig = {}) {
         const responsePromise = streamConfig.openai.createChatCompletion(Object.assign(Object.assign({}, createChatCompletionRequest), { stream: true }), Object.assign(Object.assign({}, axiosConfig), { responseType: 'stream' }));
         responsePromise
             .then((response) => {

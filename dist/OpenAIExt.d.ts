@@ -19,7 +19,7 @@ export declare class OpenAIExt {
      * @param streamConfig The config for the stream request. This includes the configured `openai` instance.
      * @param axiosConfig Optional axios config for the request.
      */
-    static streamServerChatCompletion(createChatCompletionRequest: any, streamConfig: ServerStreamChatCompletionConfig, axiosConfig: any): Promise<any>;
+    static streamServerChatCompletion(createChatCompletionRequest: any, streamConfig: ServerStreamChatCompletionConfig, axiosConfig?: any): Promise<any>;
     /**
      * Parse a content draft from the provided data string. The data string contains lines of JSON completion data starting with `data: ` that are separated by two newlines.
      * The completion is terminated by the line `data: [DONE]`, when the completion content can be considered final and done.
