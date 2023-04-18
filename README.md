@@ -176,10 +176,12 @@ OpenAIExt.streamServerChatCompletion(
 If you'd like to stop the completion, call `stream.destroy()`. The `onDone()` handler will be called.
 
 ```js
+const response = await OpenAIExt.streamServerChatCompletion(...);
+const stream = response.data;
 stream.destroy();
 ```
 
-You can also stop completion using an [Axios cancellation](https://axios-http.com/docs/cancellation) in the Axios config.
+You can also stop completion using an [Axios cancellation](https://axios-http.com/docs/cancellation) in the Axios config (pending [#134](https://github.com/openai/openai-node/issues/134)).
 
 ## Content Parsing Utility
 
