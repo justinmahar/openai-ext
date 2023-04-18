@@ -84,7 +84,7 @@ export class OpenAIExt {
   public static streamServerChatCompletion(
     createChatCompletionRequest: any,
     streamConfig: ServerStreamChatCompletionConfig,
-    axiosConfig: any,
+    axiosConfig: any = {},
   ): Promise<any> {
     const responsePromise = streamConfig.openai.createChatCompletion(
       {
