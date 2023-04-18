@@ -85,7 +85,7 @@ export class OpenAIExt {
     createChatCompletionRequest: any,
     streamConfig: ServerStreamChatCompletionConfig,
     axiosConfig: any,
-  ): void {
+  ): Promise<any> {
     const responsePromise = streamConfig.openai.createChatCompletion(
       {
         ...createChatCompletionRequest,
@@ -121,6 +121,8 @@ export class OpenAIExt {
           streamConfig.handler.onError(e, undefined);
         }
       });
+
+    return responsePromise;
   }
 
   /**
