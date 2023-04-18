@@ -1,14 +1,15 @@
-import { ReasonPhrases, StatusCodes, getReasonPhrase, getStatusCode } from 'http-status-codes';
-import React from 'react';
-import { DivProps } from 'react-html-props';
 import 'bootstrap/dist/css/bootstrap.css';
+import { getReasonPhrase } from 'http-status-codes';
+import React from 'react';
 import { Alert, Badge, Button, Card, Form, Spinner } from 'react-bootstrap';
+import { DivProps } from 'react-html-props';
 import { OpenAIExt } from '../OpenAIExt';
 
 export interface ClientDemoProps extends DivProps {}
 
 export const ClientDemo = (props: ClientDemoProps) => {
   const [apiKey, setApiKey] = React.useState('');
+  const [model, setModel] = React.useState('gpt-3.5-turbo');
   const trimmedApiKey = apiKey.trim();
   const [systemMessage, setSystemMessage] = React.useState('You are a helpful assistant.');
   const trimmedSystemMessage = systemMessage.trim();
@@ -35,7 +36,7 @@ export const ClientDemo = (props: ClientDemoProps) => {
 
       const xhr = OpenAIExt.streamClientChatCompletion(
         {
-          model: 'gpt-3.5-turbo',
+          model,
           messages: [
             { role: 'system', content: systemMessage },
             { role: 'user', content: userPrompt },
@@ -89,18 +90,30 @@ export const ClientDemo = (props: ClientDemoProps) => {
         >
           <Card>
             <Card.Body className="d-flex flex-column gap-1">
-              <div className="small fw-bold">API Key:</div>
-              <div className="d-flex gap-1">
+              <div>
+                <div className="small fw-bold">API Key:</div>
+                <div className="d-flex gap-1">
+                  <Form.Control
+                    type={showKey ? 'text' : 'password'}
+                    placeholder="Enter API key"
+                    value={apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                    required
+                  />
+                  <Button variant="outline-primary" onClick={() => setShowKey(!showKey)}>
+                    {showKey ? 'Hide' : 'Show'}
+                  </Button>
+                </div>
+              </div>
+              <div>
+                <div className="small fw-bold">Model:</div>
                 <Form.Control
-                  type={showKey ? 'text' : 'password'}
-                  placeholder="Enter API key"
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
+                  type="text"
+                  placeholder="Enter model"
+                  value={model}
+                  onChange={(e) => setModel(e.target.value)}
                   required
                 />
-                <Button variant="outline-primary" onClick={() => setShowKey(!showKey)}>
-                  {showKey ? 'Hide' : 'Show'}
-                </Button>
               </div>
             </Card.Body>
           </Card>
