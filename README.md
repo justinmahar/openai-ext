@@ -13,6 +13,8 @@
 
 <h3><a href="https://justinmahar.github.io/openai-ext/?path=/story/demo--client">👁️ Live Demo</a></h3>
 
+[![Live Demo](https://raw.githubusercontent.com/justinmahar/openai-ext/master/public/demo.gif)](https://justinmahar.github.io/openai-ext/?path=/story/demo--client)
+
 ## Documentation
 
 Read the **[official documentation](https://justinmahar.github.io/openai-ext/)**.
