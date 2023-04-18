@@ -4,16 +4,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClientDemo = void 0;
+require("bootstrap/dist/css/bootstrap.css");
 const http_status_codes_1 = require("http-status-codes");
 const react_1 = __importDefault(require("react"));
-require("bootstrap/dist/css/bootstrap.css");
 const react_bootstrap_1 = require("react-bootstrap");
 const OpenAIExt_1 = require("../OpenAIExt");
 const ClientDemo = (props) => {
     const [apiKey, setApiKey] = react_1.default.useState('');
+    const [model, setModel] = react_1.default.useState('gpt-3.5-turbo');
     const trimmedApiKey = apiKey.trim();
-    const [systemMessage, setSystemMessage] = react_1.default.useState('You are a helpful assistant.');
-    const trimmedSystemMessage = systemMessage.trim();
+    const [systemPrompt, setSystemPrompt] = react_1.default.useState('You are a helpful assistant.');
+    const trimmedSystemMessage = systemPrompt.trim();
     const [userPrompt, setUserPrompt] = react_1.default.useState('Tell me a funny joke.');
     const trimmedUserPrompt = userPrompt.trim();
     const [error, setError] = react_1.default.useState(undefined);
@@ -32,9 +33,9 @@ const ClientDemo = (props) => {
             setStatus(undefined);
             setCompletion('');
             const xhr = OpenAIExt_1.OpenAIExt.streamClientChatCompletion({
-                model: 'gpt-3.5-turbo',
+                model,
                 messages: [
-                    { role: 'system', content: systemMessage },
+                    { role: 'system', content: systemPrompt },
                     { role: 'user', content: userPrompt },
                 ],
             }, {
@@ -58,7 +59,7 @@ const ClientDemo = (props) => {
             });
             setXhr(xhr);
         }
-    }, [apiKey, running, shouldRun, systemMessage, userPrompt]);
+    }, [apiKey, running, shouldRun, systemPrompt, userPrompt]);
     return (react_1.default.createElement(react_bootstrap_1.Card, null,
         react_1.default.createElement(react_bootstrap_1.Card.Header, null,
             react_1.default.createElement("div", { className: "d-flex flex-wrap align-items-center gap-4" },
@@ -74,15 +75,19 @@ const ClientDemo = (props) => {
                 } },
                 react_1.default.createElement(react_bootstrap_1.Card, null,
                     react_1.default.createElement(react_bootstrap_1.Card.Body, { className: "d-flex flex-column gap-1" },
-                        react_1.default.createElement("div", { className: "small fw-bold" }, "API Key:"),
-                        react_1.default.createElement("div", { className: "d-flex gap-1" },
-                            react_1.default.createElement(react_bootstrap_1.Form.Control, { type: showKey ? 'text' : 'password', placeholder: "Enter API key", value: apiKey, onChange: (e) => setApiKey(e.target.value), required: true }),
-                            react_1.default.createElement(react_bootstrap_1.Button, { variant: "outline-primary", onClick: () => setShowKey(!showKey) }, showKey ? 'Hide' : 'Show')))),
+                        react_1.default.createElement("div", null,
+                            react_1.default.createElement("div", { className: "small fw-bold" }, "API Key:"),
+                            react_1.default.createElement("div", { className: "d-flex gap-1" },
+                                react_1.default.createElement(react_bootstrap_1.Form.Control, { type: showKey ? 'text' : 'password', placeholder: "Enter API key", value: apiKey, onChange: (e) => setApiKey(e.target.value), required: true }),
+                                react_1.default.createElement(react_bootstrap_1.Button, { variant: "outline-primary", onClick: () => setShowKey(!showKey) }, showKey ? 'Hide' : 'Show'))),
+                        react_1.default.createElement("div", null,
+                            react_1.default.createElement("div", { className: "small fw-bold" }, "Model:"),
+                            react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "Enter model", value: model, onChange: (e) => setModel(e.target.value), required: true })))),
                 react_1.default.createElement(react_bootstrap_1.Alert, { variant: "info", className: "d-flex flex-column gap-1 mb-0" },
-                    react_1.default.createElement("div", { className: "small fw-bold" }, "System Message:"),
-                    react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "Enter system message", value: systemMessage, onChange: (e) => setSystemMessage(e.target.value), required: true })),
+                    react_1.default.createElement("div", { className: "small fw-bold" }, "\uD83E\uDD16 System Prompt:"),
+                    react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "Enter system prompt", value: systemPrompt, onChange: (e) => setSystemPrompt(e.target.value), required: true })),
                 react_1.default.createElement(react_bootstrap_1.Alert, { variant: "primary", className: "d-flex flex-column gap-1 mb-0" },
-                    react_1.default.createElement("div", { className: "small fw-bold" }, "User Prompt:"),
+                    react_1.default.createElement("div", { className: "small fw-bold" }, "\uD83D\uDC64 User Prompt:"),
                     react_1.default.createElement(react_bootstrap_1.Form.Control, { type: "text", placeholder: "Enter user prompt", value: userPrompt, onChange: (e) => setUserPrompt(e.target.value), required: true })),
                 react_1.default.createElement("div", { className: "d-flex gap-1" },
                     react_1.default.createElement(react_bootstrap_1.Button, { type: "submit", variant: "primary", disabled: running },
