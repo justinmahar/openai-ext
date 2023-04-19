@@ -9,11 +9,18 @@ export class OpenAIExt {
    * @param createChatCompletionRequest The completion request to stream. Pass the same argument you'd pass to the OpenAI API's `createChatCompletion` function.
    * @param streamConfig The config for the request. This includes the API key and an optional endpoint URL. Uses v1 chat completions endpoint by default.
    * @returns An XMLHttpRequest instance for the connection.
+   * @throws An error if called in a Node.js environment.
    */
   public static streamClientChatCompletion(
     createChatCompletionRequest: any,
     streamConfig: ClientStreamChatCompletionConfig,
   ): XMLHttpRequest {
+    if (!streamConfig.allEnvsAllowed && OpenAIExt.isEnvNodeJS()) {
+      throw new Error(
+        'You are performing a client/browser chat completion in a Node.js environment.\nUse OpenAIExt.streamServerChatCompletion() instead.\nSee: https://github.com/justinmahar/openai-ext/#nodejs--server',
+      );
+    }
+
     const apiKey = streamConfig.apiKey;
     const url = streamConfig.chatCompletionsUrl ?? OpenAIExt.V1_CHAT_COMPLETIONS_URL;
 
@@ -86,6 +93,12 @@ export class OpenAIExt {
     streamConfig: ServerStreamChatCompletionConfig,
     axiosConfig: any = {},
   ): Promise<any> {
+    if (!streamConfig.allEnvsAllowed && !OpenAIExt.isEnvNodeJS()) {
+      throw new Error(
+        'You are performing a server/Node.js chat completion in a browser environment.\nUse OpenAIExt.streamClientChatCompletion() instead.\nSee: https://github.com/justinmahar/openai-ext/#browser--client',
+      );
+    }
+
     const responsePromise = streamConfig.openai.createChatCompletion(
       {
         ...createChatCompletionRequest,
@@ -174,6 +187,24 @@ export class OpenAIExt {
       isFinal,
     };
   }
+
+  /**
+   * Returns true if the environment is Node.js (server), false otherwise.
+   *
+   * @returns True if the environment is Node.js (server), false otherwise.
+   */
+  public static isEnvNodeJS() {
+    return typeof process !== 'undefined' && process?.versions?.node;
+  }
+
+  /**
+   * Returns true if the environment is the browser (client), false otherwise.
+   *
+   * @returns True if the environment is the browser (client), false otherwise.
+   */
+  public static isEnvBrowser() {
+    return !OpenAIExt.isEnvNodeJS();
+  }
 }
 
 /**
@@ -238,6 +269,10 @@ export interface ClientStreamChatCompletionConfig {
    * A handler containing callbacks that are called during the stream.
    */
   handler?: ClientStreamChatCompletionHandler;
+  /**
+   * Allow running client completions in a Node.js environment. Not recommended unless you know what you're doing.
+   */
+  allEnvsAllowed?: boolean;
 }
 
 /**
@@ -283,4 +318,8 @@ export interface ServerStreamChatCompletionConfig {
    * A handler containing callbacks that are called during the stream.
    */
   handler?: ServerStreamChatCompletionHandler;
+  /**
+   * Allow running server completions in a browser environment. Not recommended unless you know what you're doing.
+   */
+  allEnvsAllowed?: boolean;
 }
