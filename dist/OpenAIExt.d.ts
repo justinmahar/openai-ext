@@ -8,6 +8,7 @@ export declare class OpenAIExt {
      * @param createChatCompletionRequest The completion request to stream. Pass the same argument you'd pass to the OpenAI API's `createChatCompletion` function.
      * @param streamConfig The config for the request. This includes the API key and an optional endpoint URL. Uses v1 chat completions endpoint by default.
      * @returns An XMLHttpRequest instance for the connection.
+     * @throws An error if called in a Node.js environment.
      */
     static streamClientChatCompletion(createChatCompletionRequest: any, streamConfig: ClientStreamChatCompletionConfig): XMLHttpRequest;
     /**
@@ -40,6 +41,18 @@ export declare class OpenAIExt {
      * boolean that will be `true` when the content is final and the completion is done.
      */
     static parseContentDraft(dataString: string): ContentDraft;
+    /**
+     * Returns true if the environment is Node.js (server), false otherwise.
+     *
+     * @returns True if the environment is Node.js (server), false otherwise.
+     */
+    static isEnvNodeJS(): string | false;
+    /**
+     * Returns true if the environment is the browser (client), false otherwise.
+     *
+     * @returns True if the environment is the browser (client), false otherwise.
+     */
+    static isEnvBrowser(): boolean;
 }
 /**
  * Content draft containing content string, which may be partial, and isFinal indicating whether the draft is final and complete.
@@ -99,6 +112,10 @@ export interface ClientStreamChatCompletionConfig {
      * A handler containing callbacks that are called during the stream.
      */
     handler?: ClientStreamChatCompletionHandler;
+    /**
+     * Allow running client completions in a Node.js environment. Not recommended unless you know what you're doing.
+     */
+    allEnvsAllowed?: boolean;
 }
 /**
  * A handler containing callbacks that are called during the stream.
@@ -140,4 +157,8 @@ export interface ServerStreamChatCompletionConfig {
      * A handler containing callbacks that are called during the stream.
      */
     handler?: ServerStreamChatCompletionHandler;
+    /**
+     * Allow running server completions in a browser environment. Not recommended unless you know what you're doing.
+     */
+    allEnvsAllowed?: boolean;
 }

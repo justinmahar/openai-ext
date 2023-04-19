@@ -10,9 +10,13 @@ class OpenAIExt {
      * @param createChatCompletionRequest The completion request to stream. Pass the same argument you'd pass to the OpenAI API's `createChatCompletion` function.
      * @param streamConfig The config for the request. This includes the API key and an optional endpoint URL. Uses v1 chat completions endpoint by default.
      * @returns An XMLHttpRequest instance for the connection.
+     * @throws An error if called in a Node.js environment.
      */
     static streamClientChatCompletion(createChatCompletionRequest, streamConfig) {
         var _a;
+        if (!streamConfig.allEnvsAllowed && OpenAIExt.isEnvNodeJS()) {
+            throw new Error('You are performing a client/browser chat completion in a Node.js environment.\nUse OpenAIExt.streamServerChatCompletion() instead.\nSee: https://github.com/justinmahar/openai-ext/#nodejs--server');
+        }
         const apiKey = streamConfig.apiKey;
         const url = (_a = streamConfig.chatCompletionsUrl) !== null && _a !== void 0 ? _a : OpenAIExt.V1_CHAT_COMPLETIONS_URL;
         const xhr = new XMLHttpRequest();
@@ -66,6 +70,9 @@ class OpenAIExt {
      * @param axiosConfig Optional axios config for the request.
      */
     static streamServerChatCompletion(createChatCompletionRequest, streamConfig, axiosConfig = {}) {
+        if (!streamConfig.allEnvsAllowed && !OpenAIExt.isEnvNodeJS()) {
+            throw new Error('You are performing a server/Node.js chat completion in a browser environment.\nUse OpenAIExt.streamClientChatCompletion() instead.\nSee: https://github.com/justinmahar/openai-ext/#browser--client');
+        }
         const responsePromise = streamConfig.openai.createChatCompletion(Object.assign(Object.assign({}, createChatCompletionRequest), { stream: true }), Object.assign(Object.assign({}, axiosConfig), { responseType: 'stream' }));
         responsePromise
             .then((response) => {
@@ -147,6 +154,23 @@ class OpenAIExt {
             content,
             isFinal,
         };
+    }
+    /**
+     * Returns true if the environment is Node.js (server), false otherwise.
+     *
+     * @returns True if the environment is Node.js (server), false otherwise.
+     */
+    static isEnvNodeJS() {
+        var _a;
+        return typeof process !== 'undefined' && ((_a = process === null || process === void 0 ? void 0 : process.versions) === null || _a === void 0 ? void 0 : _a.node);
+    }
+    /**
+     * Returns true if the environment is the browser (client), false otherwise.
+     *
+     * @returns True if the environment is the browser (client), false otherwise.
+     */
+    static isEnvBrowser() {
+        return !OpenAIExt.isEnvNodeJS();
     }
 }
 exports.OpenAIExt = OpenAIExt;
