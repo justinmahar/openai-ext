@@ -15,7 +15,7 @@ class OpenAIExt {
     static streamClientChatCompletion(createChatCompletionRequest, streamConfig) {
         var _a;
         if (!streamConfig.allEnvsAllowed && OpenAIExt.isEnvNodeJS()) {
-            throw new Error('You are performing a client/browser chat completion in a Node.js environment.\nUse OpenAIExt.streamServerChatCompletion() instead.\nSee: https://github.com/justinmahar/openai-ext/#nodejs--server');
+            throw new Error('You are performing a client/browser chat completion in a Node.js environment.\nUse OpenAIExt.streamServerChatCompletion() instead. To disable this error and proceed anyways (not recommended), set the allEnvsAllowed option to true.\nSee: https://github.com/justinmahar/openai-ext/#nodejs--server');
         }
         const apiKey = streamConfig.apiKey;
         const url = (_a = streamConfig.chatCompletionsUrl) !== null && _a !== void 0 ? _a : OpenAIExt.V1_CHAT_COMPLETIONS_URL;
@@ -71,7 +71,7 @@ class OpenAIExt {
      */
     static streamServerChatCompletion(createChatCompletionRequest, streamConfig, axiosConfig = {}) {
         if (!streamConfig.allEnvsAllowed && !OpenAIExt.isEnvNodeJS()) {
-            throw new Error('You are performing a server/Node.js chat completion in a browser environment.\nUse OpenAIExt.streamClientChatCompletion() instead.\nSee: https://github.com/justinmahar/openai-ext/#browser--client');
+            throw new Error('You are performing a server/Node.js chat completion in a browser environment. Use OpenAIExt.streamClientChatCompletion() instead. To disable this error and proceed anyways (not recommended), set the allEnvsAllowed option to true.\nSee: https://github.com/justinmahar/openai-ext/#browser--client');
         }
         const responsePromise = streamConfig.openai.createChatCompletion(Object.assign(Object.assign({}, createChatCompletionRequest), { stream: true }), Object.assign(Object.assign({}, axiosConfig), { responseType: 'stream' }));
         responsePromise
