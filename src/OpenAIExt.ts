@@ -32,8 +32,15 @@ export class OpenAIExt {
     xhr.onprogress = function (_event) {
       if (streamConfig.handler?.onContent) {
         const dataString = xhr.responseText;
-        const contentDraft = OpenAIExt.parseContentDraft(dataString);
-        streamConfig.handler.onContent(contentDraft.content, contentDraft.isFinal, xhr);
+        try {
+          const contentDraft = OpenAIExt.parseContentDraft(dataString);
+          streamConfig.handler.onContent(contentDraft.content, contentDraft.isFinal, xhr);
+        } catch (e) {
+          if (streamConfig.handler?.onError) {
+            streamConfig.handler.onError(e as Error, xhr.status, xhr);
+            xhr.abort();
+          }
+        }
       }
     };
 
@@ -114,8 +121,17 @@ export class OpenAIExt {
         stream.on('data', (chunk: Buffer) => {
           if (streamConfig.handler?.onContent) {
             dataString += chunk.toString();
-            const contentDraft = OpenAIExt.parseContentDraft(dataString);
-            streamConfig.handler.onContent(contentDraft.content, contentDraft.isFinal, stream);
+            try {
+              const contentDraft = OpenAIExt.parseContentDraft(dataString);
+              streamConfig.handler.onContent(contentDraft.content, contentDraft.isFinal, stream);
+            } catch (e) {
+              if (streamConfig.handler?.onError) {
+                streamConfig.handler.onError(e as Error, stream);
+                if (stream.destroy) {
+                  stream.destroy();
+                }
+              }
+            }
           }
         });
         stream.on('end', () => {
@@ -153,9 +169,12 @@ export class OpenAIExt {
    * }
    * ```
    *
+   * Throws and error when the stream contains an error message.
+   *
    * @param dataString The data string containing double-newline-separated data lines starting with `data: `.
    * @returns An object containing a `content` property with the content, which may be partial, and an `isFinal`
    * boolean that will be `true` when the content is final and the completion is done.
+   * @throws An error when the JSON response contains an error.
    */
   public static parseContentDraft(dataString: string): ContentDraft {
     const dataPrefix = 'data: ';
@@ -169,10 +188,13 @@ export class OpenAIExt {
       .filter((v) => !!v); // Remove empty lines
 
     const contentSnippets = dataJsonLines.map((dataJson) => {
-      let parsed: any = undefined;
       try {
-        parsed = JSON.parse(dataJson);
-        return parsed?.choices[0]?.delta?.content ?? '';
+        const parsed = JSON.parse(dataJson);
+        if (parsed.error) {
+          throw new Error(JSON.stringify(parsed.error));
+        } else {
+          return parsed?.choices[0]?.delta?.content ?? '';
+        }
       } catch (e) {
         console.error(e);
         console.error(`Bad data JSON: \`${dataJson}\``);
