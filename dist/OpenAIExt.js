@@ -24,11 +24,19 @@ class OpenAIExt {
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.setRequestHeader('Authorization', 'Bearer ' + apiKey);
         xhr.onprogress = function (_event) {
-            var _a;
+            var _a, _b;
             if ((_a = streamConfig.handler) === null || _a === void 0 ? void 0 : _a.onContent) {
                 const dataString = xhr.responseText;
-                const contentDraft = OpenAIExt.parseContentDraft(dataString);
-                streamConfig.handler.onContent(contentDraft.content, contentDraft.isFinal, xhr);
+                try {
+                    const contentDraft = OpenAIExt.parseContentDraft(dataString);
+                    streamConfig.handler.onContent(contentDraft.content, contentDraft.isFinal, xhr);
+                }
+                catch (e) {
+                    if ((_b = streamConfig.handler) === null || _b === void 0 ? void 0 : _b.onError) {
+                        streamConfig.handler.onError(e, xhr.status, xhr);
+                        xhr.abort();
+                    }
+                }
             }
         };
         xhr.onreadystatechange = () => {
@@ -79,11 +87,21 @@ class OpenAIExt {
             const stream = response.data;
             let dataString = '';
             stream.on('data', (chunk) => {
-                var _a;
+                var _a, _b;
                 if ((_a = streamConfig.handler) === null || _a === void 0 ? void 0 : _a.onContent) {
                     dataString += chunk.toString();
-                    const contentDraft = OpenAIExt.parseContentDraft(dataString);
-                    streamConfig.handler.onContent(contentDraft.content, contentDraft.isFinal, stream);
+                    try {
+                        const contentDraft = OpenAIExt.parseContentDraft(dataString);
+                        streamConfig.handler.onContent(contentDraft.content, contentDraft.isFinal, stream);
+                    }
+                    catch (e) {
+                        if ((_b = streamConfig.handler) === null || _b === void 0 ? void 0 : _b.onError) {
+                            streamConfig.handler.onError(e, stream);
+                            if (stream.destroy) {
+                                stream.destroy();
+                            }
+                        }
+                    }
                 }
             });
             stream.on('end', () => {
@@ -122,9 +140,12 @@ class OpenAIExt {
      * }
      * ```
      *
+     * Throws and error when the stream contains an error message.
+     *
      * @param dataString The data string containing double-newline-separated data lines starting with `data: `.
      * @returns An object containing a `content` property with the content, which may be partial, and an `isFinal`
      * boolean that will be `true` when the content is final and the completion is done.
+     * @throws An error when the JSON response contains an error.
      */
     static parseContentDraft(dataString) {
         const dataPrefix = 'data: ';
@@ -138,10 +159,14 @@ class OpenAIExt {
             .filter((v) => !!v); // Remove empty lines
         const contentSnippets = dataJsonLines.map((dataJson) => {
             var _a, _b, _c;
-            let parsed = undefined;
             try {
-                parsed = JSON.parse(dataJson);
-                return (_c = (_b = (_a = parsed === null || parsed === void 0 ? void 0 : parsed.choices[0]) === null || _a === void 0 ? void 0 : _a.delta) === null || _b === void 0 ? void 0 : _b.content) !== null && _c !== void 0 ? _c : '';
+                const parsed = JSON.parse(dataJson);
+                if (parsed.error) {
+                    throw new Error(JSON.stringify(parsed.error));
+                }
+                else {
+                    return (_c = (_b = (_a = parsed === null || parsed === void 0 ? void 0 : parsed.choices[0]) === null || _a === void 0 ? void 0 : _a.delta) === null || _b === void 0 ? void 0 : _b.content) !== null && _c !== void 0 ? _c : '';
+                }
             }
             catch (e) {
                 console.error(e);

@@ -36,9 +36,12 @@ export declare class OpenAIExt {
      * }
      * ```
      *
+     * Throws and error when the stream contains an error message.
+     *
      * @param dataString The data string containing double-newline-separated data lines starting with `data: `.
      * @returns An object containing a `content` property with the content, which may be partial, and an `isFinal`
      * boolean that will be `true` when the content is final and the completion is done.
+     * @throws An error when the JSON response contains an error.
      */
     static parseContentDraft(dataString: string): ContentDraft;
     /**
