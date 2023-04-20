@@ -34,7 +34,6 @@ class OpenAIExt {
                 catch (e) {
                     if ((_b = streamConfig.handler) === null || _b === void 0 ? void 0 : _b.onError) {
                         streamConfig.handler.onError(e, xhr.status, xhr);
-                        xhr.abort();
                     }
                 }
             }
@@ -97,9 +96,6 @@ class OpenAIExt {
                     catch (e) {
                         if ((_b = streamConfig.handler) === null || _b === void 0 ? void 0 : _b.onError) {
                             streamConfig.handler.onError(e, stream);
-                            if (stream.destroy) {
-                                stream.destroy();
-                            }
                         }
                     }
                 }
