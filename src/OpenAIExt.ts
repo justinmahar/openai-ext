@@ -38,7 +38,6 @@ export class OpenAIExt {
         } catch (e) {
           if (streamConfig.handler?.onError) {
             streamConfig.handler.onError(e as Error, xhr.status, xhr);
-            xhr.abort();
           }
         }
       }
@@ -127,9 +126,6 @@ export class OpenAIExt {
             } catch (e) {
               if (streamConfig.handler?.onError) {
                 streamConfig.handler.onError(e as Error, stream);
-                if (stream.destroy) {
-                  stream.destroy();
-                }
               }
             }
           }
