@@ -186,16 +186,15 @@ export class OpenAIExt {
     const contentSnippets = dataJsonLines.map((dataJson) => {
       try {
         const parsed = JSON.parse(dataJson);
-        if (parsed.error) {
-          throw new Error(JSON.stringify(parsed.error));
+        const choices = parsed && parsed.choices;
+        if (choices && Array.isArray(choices) && choices.length > 0) {
+          return choices[0].delta?.content ?? '';
         } else {
-          return parsed?.choices[0]?.delta?.content ?? '';
+          throw new Error(dataJson);
         }
       } catch (e) {
-        console.error(e);
-        console.error(`Bad data JSON: \`${dataJson}\``);
+        throw e;
       }
-      return '';
     });
 
     const content = contentSnippets.join('');
