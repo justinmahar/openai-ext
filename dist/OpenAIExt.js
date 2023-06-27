@@ -154,21 +154,20 @@ class OpenAIExt {
             .split(dataPrefix)
             .filter((v) => !!v); // Remove empty lines
         const contentSnippets = dataJsonLines.map((dataJson) => {
-            var _a, _b, _c;
+            var _a, _b;
             try {
                 const parsed = JSON.parse(dataJson);
-                if (parsed.error) {
-                    throw new Error(JSON.stringify(parsed.error));
+                const choices = parsed && parsed.choices;
+                if (choices && Array.isArray(choices) && choices.length > 0) {
+                    return (_b = (_a = choices[0].delta) === null || _a === void 0 ? void 0 : _a.content) !== null && _b !== void 0 ? _b : '';
                 }
                 else {
-                    return (_c = (_b = (_a = parsed === null || parsed === void 0 ? void 0 : parsed.choices[0]) === null || _a === void 0 ? void 0 : _a.delta) === null || _b === void 0 ? void 0 : _b.content) !== null && _c !== void 0 ? _c : '';
+                    throw new Error(dataJson);
                 }
             }
             catch (e) {
-                console.error(e);
-                console.error(`Bad data JSON: \`${dataJson}\``);
+                throw e;
             }
-            return '';
         });
         const content = contentSnippets.join('');
         return {
