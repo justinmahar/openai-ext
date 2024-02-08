@@ -14,6 +14,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // === Stories ===
-export const Hello: Story = {
+export const Client: Story = {
   name: 'Client Demo',
 };
