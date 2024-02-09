@@ -1,7 +1,7 @@
 {
   "name": "openai-ext",
   "version": "1.2.9",
-  "coreVersion": "3.0.4",
+  "coreVersion": "3.0.7",
   "author": "Justin Mahar <contact@justinmahar.com>",
   "description": "Extension to OpenAI's API to support streaming chat completions on the client.",
   "homepage": "https://justinmahar.github.io/openai-ext/",
