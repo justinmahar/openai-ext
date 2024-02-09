@@ -1,7 +1,7 @@
 {
   "name": "openai-ext",
   "version": "1.2.10",
-  "coreVersion": "3.0.7",
+  "coreVersion": "3.0.9",
   "author": "Justin Mahar <contact@justinmahar.com>",
   "description": "Extension to OpenAI's API to support streaming chat completions on the client.",
   "homepage": "https://justinmahar.github.io/openai-ext/",
@@ -46,7 +46,7 @@
     "eslint-plugin-storybook": "^0.6.15",
     "eslint": "^8.56.0",
     "http-status-codes": "^2.2.0",
-    "lockblocks": "^1.1.4",
+    "lockblocks": "^1.1.8",
     "prettier": "^3.2.5",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
